@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Mario</title>
+</head>
+<style>
+  #screen {
+    position: relative;
+    transform-origin: bottom left;
+    height: 500px;
+    width: 800px;
+    border: 1px solid black;
+  }
+  #mario {
+    position: absolute;
+    border: 1px solid black;
+    width: 20px;
+    height: 20px;
+    bottom: 100px;
+    left: 0px;
+  }
+  #link1 {
+    position: absolute;
+    border: 1px solid black;
+    width: 100px;
+    height: 20px;
+    left: 450px;
+    bottom: 80px;
+  }
+  .obstacle {
+    position: absolute;
+    border: 1px solid black;
+  }
+  .obstacle#obstacle1 {
+    width: 100px;
+    height: 100px;
+    left: 400px;
+    bottom: 0px;
+  }
+</style>
+<body>
+  <div id="screen">
+    <div id="mario"></div>
+    <div id="link1">link1</div>
+    <div class='obstacle' id="obstacle1">obstacle</div>
+  </div>
+  <script src="mario.js" charset="utf-8"></script>
+</body>
+</html>
