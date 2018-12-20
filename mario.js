@@ -1,13 +1,38 @@
 const mario = document.querySelector('#mario')
 const screen = document.querySelector('#screen')
-const link1 = document.querySelector('#link1')
-const obstacle1 = document.querySelector('#obstacle1')
+const links = document.querySelectorAll('nav li')
+document.querySelector('#retry').addEventListener('click', createBars)
+let bars = document.querySelectorAll('.bars')
+
+function createBars () {
+  // 기존 bar가 존재하면 삭제
+  if (bars) {
+    for (let i = 0; i < bars.length; i++) {
+      screen.removeChild(bars[i])
+    }
+  }
+  bars = []
+  // 새로운 bar 생성
+  for (let i = 0; i < 20; i++) {
+    const bar = document.createElement('div')
+    bar.className = 'bars'
+    bar.id = `bar${i}`
+    bar.style.left = `${Math.floor(Math.random() * 1000)}px`// 0 ~ 800 px 사이
+    bar.style.bottom = `${Math.floor(Math.random() * 400)}px`// 0 ~ 400 px 사이
+    screen.appendChild(bar)
+  }
+  bars = document.querySelectorAll('.bars')
+}
+createBars()
+
+const jumpPower = 80
 let isKeyDown = []
-let x
-let y
+let x = mario.offsetLeft
+let y = screen.offsetHeight - mario.offsetHeight - mario.offsetTop - 2 // bottom 값으로 만들어 주기
 let xVelocity = 0
 let yVelocity = 0
 let isJump = false
+let jumpOverSurface = Array(2).fill(false)
 let openLink = false
 
 document.onkeydown = onKeyDown
@@ -15,18 +40,7 @@ document.onkeyup = onKeyUp
 
 setInterval(gameLoop, 20)
 
-function onKeyDown (e) {
-  isKeyDown[e.keyCode] = true
-}
-
-function onKeyUp (e) {
-  delete isKeyDown[e.keyCode]
-}
-
 function gameLoop () {
-  x = mario.offsetLeft
-  y = screen.offsetHeight - mario.offsetHeight - mario.offsetTop // bottom 값으로 만들어 주기
-
   if (isKeyDown[38] && !isJump) {
     // up arrow
     moveUp()
@@ -66,9 +80,15 @@ function gameLoop () {
     x = 0
   }
 
-  // link1
-  makeBar(link1)
+  bars.forEach(function (bar, idx) {
+    putBars(bar, idx)
+  })
 
+  links.forEach(function (link, idx) {
+    touchLink(link, idx)
+  })
+
+  touchLink()
   // drawing
   mario.style.left = `${x}px`
   mario.style.bottom = `${y}px`
@@ -84,7 +104,7 @@ function moveLeft () {
 }
 
 function moveUp () {
-  yVelocity = 90
+  yVelocity = jumpPower
   isJump = true
 }
 
@@ -92,28 +112,44 @@ function moveDown () {
   yVelocity -= 2
 }
 
-function makeBar (bar) {
-  const surface = screen.offsetHeight - bar.offsetTop
-  const barY = screen.offsetHeight - bar.offsetTop - bar.offsetHeight - mario.offsetHeight // 밑변
+function putBars (bar, idx) {
+  const surface = screen.offsetHeight - bar.offsetTop - 4
   const barX = bar.offsetLeft
-  if (y === surface &&
-   barX - mario.offsetWidth < x &&
-   x < (barX + bar.offsetWidth)) {
-    y = surface
-    yVelocity = 0
-  } else if (y > barY &&
-    y < surface &&
-    barX - mario.offsetWidth < x &&
-    x < (barX + bar.offsetWidth)) {
-    y = barY
-    yVelocity = 0
-    if (!openLink) {
-      console.log('link')
-      // window.open('http://woolimi.github.io', '_blank')
-      openLink = true
-      isKeyDown = []
+
+  if (barX - mario.offsetWidth < x && x < (barX + bar.offsetWidth)) {
+    // 표면 위로 점프할 경우 jumpOverSurface 를 true로 바꾼다
+    if (y > surface) {
+      jumpOverSurface[idx] = true
+    }
+    if (y < surface && jumpOverSurface[idx]) {
+      y = surface
+      yVelocity = 0
+      isJump = false
     }
   } else {
-    openLink = false
+    jumpOverSurface[idx] = false
   }
+}
+
+function touchLink (link, idx) {
+  const linkX = idx * 66
+  // console.log(link.offsetLeft)
+  // const linkX = link.offsetLeft
+  if (linkX - mario.offsetWidth < x && x < (linkX + link.offsetWidth)) {
+    if (y > screen.offsetHeight - 46) {
+      y = screen.offsetHeight - 46
+      yVelocity = 0
+      if (!openLink) {
+        console.log(`link${idx}`)
+      }
+    }
+  }
+}
+
+function onKeyDown (e) {
+  isKeyDown[e.keyCode] = true
+}
+
+function onKeyUp (e) {
+  delete isKeyDown[e.keyCode]
 }
