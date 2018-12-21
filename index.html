@@ -5,80 +5,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style.css">
   <title>Mario</title>
 </head>
-<style>
-  nav {
-    font-family: monospace;
-  }
-  nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
-  }
-
-  nav li {
-    float: left;
-    border-right: 1px solid #bbb;
-  }
-
-  nav li:last-child {
-    border-right: none;
-  }
-
-  nav li a {
-    font-size: 15px;
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-  }
-
-  nav li a:hover:not(.active) {
-    background-color: #111;
-  }
-
-  nav .active {
-    background-color: #4CAF50;
-  }
-  body {
-    height: 100%
-  }
-  #screen {
-    position: relative;
-    transform-origin: bottom left;
-    height: 500px;
-    width: 100%;
-    border: 1px solid black;
-  }
-
-  #mario {
-    position: absolute;
-    border: 1px solid black;
-    width: 20px;
-    height: 20px;
-    bottom: 100px;
-    left: 0px;
-  }
-
-  .bars {
-    position: absolute;
-    border: 1px solid black;
-    width: 100px;
-    height: 20px;
-    background-color: rgb(75, 33, 19);
-  }
-
-</style>
-
 <body>
   <div id="screen">
     <nav>
       <ul>
-        <li><a class="active" href="#home">Home</a></li>
+        <li><a>Home</a></li>
         <li><a>Google</a></li>
         <li><a>Amazon</a></li>
         <li style="float:right"><a id="retry">REGENERATE BARS</a></li>

@@ -2,7 +2,19 @@ const mario = document.querySelector('#mario')
 const screen = document.querySelector('#screen')
 const links = document.querySelectorAll('nav li')
 document.querySelector('#retry').addEventListener('click', createBars)
-let bars = document.querySelectorAll('.bars')
+const jumpPower = 40
+let isKeyDown = []
+let x = mario.offsetLeft
+let y = screen.offsetHeight - mario.offsetHeight - mario.offsetTop // bottom 값으로 만들어 주기
+let xVelocity = 0
+let yVelocity = 0
+let isJump = false
+let jumpOverSurface = []
+let openLink = false
+let bars
+let LR = true // left :false, right: true
+
+createBars()
 
 function createBars () {
   // 기존 bar가 존재하면 삭제
@@ -13,27 +25,16 @@ function createBars () {
   }
   bars = []
   // 새로운 bar 생성
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 15; i++) {
     const bar = document.createElement('div')
     bar.className = 'bars'
     bar.id = `bar${i}`
-    bar.style.left = `${Math.floor(Math.random() * 1000)}px`// 0 ~ 800 px 사이
-    bar.style.bottom = `${Math.floor(Math.random() * 400)}px`// 0 ~ 400 px 사이
+    bar.style.left = `${Math.floor(Math.random() * (screen.offsetWidth - 100))}px`
+    bar.style.bottom = `${Math.floor(Math.random() * 300) + 150}px`// 200 ~ 400 px 사이
     screen.appendChild(bar)
   }
   bars = document.querySelectorAll('.bars')
 }
-createBars()
-
-const jumpPower = 80
-let isKeyDown = []
-let x = mario.offsetLeft
-let y = screen.offsetHeight - mario.offsetHeight - mario.offsetTop - 2 // bottom 값으로 만들어 주기
-let xVelocity = 0
-let yVelocity = 0
-let isJump = false
-let jumpOverSurface = Array(2).fill(false)
-let openLink = false
 
 document.onkeydown = onKeyDown
 document.onkeyup = onKeyUp
@@ -67,16 +68,16 @@ function gameLoop () {
   yVelocity *= 0.8 // friction
 
   // if charactor is out of ground
-  if (y < 0) {
+  if (y < 78) {
     isJump = false
-    y = 0
+    y = 78
     yVelocity = 0
   }
 
   // if mario is going off the left of the screen
   if (x < 0) {
-    x = screen.offsetWidth
-  } else if (x > screen.offsetWidth) { // if mario goes past right boundary
+    x = screen.offsetWidth - mario.offsetWidth
+  } else if (x > screen.offsetWidth - mario.offsetWidth) { // if mario goes past right boundary
     x = 0
   }
 
@@ -88,8 +89,24 @@ function gameLoop () {
     touchLink(link, idx)
   })
 
-  touchLink()
   // drawing
+  if (LR) { // right
+    if (isJump) { // jump
+      mario.className = ''
+      mario.classList.add('jumpR')
+    } else { // no jump
+      mario.className = ''
+      mario.classList.add('stopR')
+    }
+  } else { // left
+    if (isJump) { // jump
+      mario.className = ''
+      mario.classList.add('jumpL')
+    } else { // no jump
+      mario.className = ''
+      mario.classList.add('stopL')
+    }
+  }
   mario.style.left = `${x}px`
   mario.style.bottom = `${y}px`
 }
@@ -97,10 +114,12 @@ function gameLoop () {
 // how to move
 function moveRight () {
   xVelocity += 2
+  LR = true
 }
 
 function moveLeft () {
   xVelocity -= 2
+  LR = false
 }
 
 function moveUp () {
@@ -113,7 +132,7 @@ function moveDown () {
 }
 
 function putBars (bar, idx) {
-  const surface = screen.offsetHeight - bar.offsetTop - 4
+  const surface = screen.offsetHeight - bar.offsetTop + 1
   const barX = bar.offsetLeft
 
   if (barX - mario.offsetWidth < x && x < (barX + bar.offsetWidth)) {
@@ -132,15 +151,21 @@ function putBars (bar, idx) {
 }
 
 function touchLink (link, idx) {
-  const linkX = idx * 66
-  // console.log(link.offsetLeft)
-  // const linkX = link.offsetLeft
+  const linkX = link.offsetLeft
   if (linkX - mario.offsetWidth < x && x < (linkX + link.offsetWidth)) {
-    if (y > screen.offsetHeight - 46) {
-      y = screen.offsetHeight - 46
+    if (y > screen.offsetHeight - link.offsetHeight) {
+      y = screen.offsetHeight - link.offsetHeight
       yVelocity = 0
       if (!openLink) {
-        console.log(`link${idx}`)
+        if (idx === links.length - 1) {
+          createBars()
+        } else {
+          console.log(`link${idx}`)
+          if (document.querySelector('li a.active')) {
+            document.querySelector('li a.active').classList.remove('active')
+          }
+          link.childNodes[0].classList.add('active')
+        }
       }
     }
   }
