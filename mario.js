@@ -2,8 +2,31 @@ const mario = document.querySelector('#mario')
 const screen = document.querySelector('#screen')
 const links = document.querySelectorAll('nav li')
 document.querySelector('#retry').addEventListener('click', createBars)
+document.querySelector('#left').addEventListener('touchstart', function () {
+  isKeyDown[37] = true
+})
+document.querySelector('#left').addEventListener('touchend', function () {
+  isKeyDown[37] = false
+})
+document.querySelector('#right').addEventListener('touchstart', function () {
+  isKeyDown[39] = true
+})
+document.querySelector('#right').addEventListener('touchend', function () {
+  isKeyDown[39] = false
+})
+document.querySelector('#jump').addEventListener('touchstart', function () {
+  isKeyDown[38] = true
+})
+document.querySelector('#jump').addEventListener('touchend', function () {
+  isKeyDown[38] = false
+})
+const linkAdress = [
+  'https://woolimi.github.io',
+  'https://google.com',
+  'https://www.w3schools.com/']
 const jumpPower = screen.offsetHeight / 15
 const groundHeight = screen.offsetHeight * 0.135
+const numBars = Math.floor(screen.offsetHeight * 0.015)
 let isKeyDown = []
 let x = mario.offsetLeft
 let y = screen.offsetHeight - mario.offsetHeight - mario.offsetTop // bottom 값으로 만들어 주기
@@ -31,11 +54,11 @@ function createBars () {
   }
   bars = []
   // 새로운 bar 생성
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < numBars; i++) {
     const bar = document.createElement('div')
     bar.className = 'bars'
     bar.id = `bar${i}`
-    bar.style.left = `${Math.floor(Math.random() * (screen.offsetWidth - screen.offsetWidth * 0.3))}px`
+    bar.style.left = `${Math.floor(Math.random() * (screen.offsetWidth - screen.offsetWidth * 0.35))}px`
     bar.style.bottom = `${Math.floor(Math.random() * screen.offsetHeight * 0.65) + groundHeight * 1.2}px`// 200 ~ 400 px 사이
     screen.appendChild(bar)
   }
@@ -207,7 +230,7 @@ function touchLink (link, idx) {
         if (idx === links.length - 1) {
           createBars()
         } else {
-          console.log(`link${idx}`)
+          window.location.href = linkAdress[idx]
           if (document.querySelector('li a.active')) {
             document.querySelector('li a.active').classList.remove('active')
           }

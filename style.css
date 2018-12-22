@@ -49,10 +49,47 @@ body {
   }
 }
 
+#console {
+  display: none;
+}
+
+@media screen and (max-width: 800px) {
+  #console {
+    display: block;
+    position: fixed;
+    width: 100%;
+    bottom: 0px;
+  }
+
+  #console .btn {
+    border: 1px solid black;
+  }
+
+  #console .arrow {
+    width: 45px;
+    height: 45px;
+    padding: 10px;
+    background-color: rgba(135, 135, 135, 0.80);
+    margin-right: 5px;
+    float: left;
+  }
+
+  #console .jump {
+    height: 45px;
+    width: 45px;
+    border-radius: 45px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+    background-color: rgba(250, 51, 51, 0.80);
+    float: right;
+  }
+}
+
 #screen {
 /*  높이는 항상 전부를 보여주어야 한다. 폭은 창의 크기에 따라 없어져도 된다 */
   position: absolute;
-  background-image: url('image/background.gif');
+  background: url('image/background.gif');
   background-repeat: repeat-x;
   background-size: auto 100%; /* 넓이 높이 */
   height: 100%; /*div의 높이*/
@@ -68,41 +105,33 @@ body {
   bottom: 100px;
   left: 0px;
 }
-#mario.stopR {
-  background-image: url('image/m_stopR.gif');
-  background-repeat: no-repeat;
-}
-#mario.stopL{
-  background-image: url('image/m_stopL.gif');
-  background-repeat: no-repeat;
-}
 #mario.jumpR {
-  background-image: url('image/m_jumpR.gif');
-  background-repeat: no-repeat;
+  background: url('image/m_move.gif') 0 0;
 }
 #mario.jumpL {
-  background-image: url('image/m_jumpL.gif');
-  background-repeat: no-repeat;
+  background: url('image/m_move.gif') -40px 0;
+}
+#mario.stopR {
+  background: url('image/m_move.gif') -80px 0;
 }
 #mario.runR1 {
-  background-image: url('image/m_runR1.gif');
-  background-repeat: no-repeat;
+  background: url('image/m_move.gif') -120px 0;
 }
 #mario.runR2 {
-  background-image: url('image/m_runR2.gif');
-  background-repeat: no-repeat;
+  background: url('image/m_move.gif') -160px 0;
+}
+#mario.stopL{
+  background: url('image/m_move.gif') -200px 0;
 }
 #mario.runL1 {
-  background-image: url('image/m_runL1.gif');
-  background-repeat: no-repeat;
+  background: url('image/m_move.gif') -240px 0;
 }
 #mario.runL2 {
-  background-image: url('image/m_runL2.gif');
-  background-repeat: no-repeat;
+  background: url('image/m_move.gif') -280px 0;
 }
 
 .bars {
-  background-image: url('image/block.gif');
+  background: url('image/block.gif');
   position: absolute;
   border: 1px solid black;
   width: 100px;
