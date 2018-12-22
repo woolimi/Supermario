@@ -2,17 +2,23 @@ const mario = document.querySelector('#mario')
 const screen = document.querySelector('#screen')
 const links = document.querySelectorAll('nav li')
 document.querySelector('#retry').addEventListener('click', createBars)
-const jumpPower = 40
+const jumpPower = screen.offsetHeight / 15
+const groundHeight = screen.offsetHeight * 0.135
 let isKeyDown = []
 let x = mario.offsetLeft
 let y = screen.offsetHeight - mario.offsetHeight - mario.offsetTop // bottom 값으로 만들어 주기
 let xVelocity = 0
 let yVelocity = 0
 let isJump = false
+let isRunR = false
+let isRunL = false
 let jumpOverSurface = []
 let openLink = false
 let bars
 let LR = true // left :false, right: true
+let runRInterval
+let runLInterval
+let runMotion = 0 // 0 or 1
 
 createBars()
 
@@ -29,8 +35,8 @@ function createBars () {
     const bar = document.createElement('div')
     bar.className = 'bars'
     bar.id = `bar${i}`
-    bar.style.left = `${Math.floor(Math.random() * (screen.offsetWidth - 100))}px`
-    bar.style.bottom = `${Math.floor(Math.random() * 300) + 150}px`// 200 ~ 400 px 사이
+    bar.style.left = `${Math.floor(Math.random() * (screen.offsetWidth - screen.offsetWidth * 0.3))}px`
+    bar.style.bottom = `${Math.floor(Math.random() * screen.offsetHeight * 0.65) + groundHeight * 1.2}px`// 200 ~ 400 px 사이
     screen.appendChild(bar)
   }
   bars = document.querySelectorAll('.bars')
@@ -61,6 +67,7 @@ function gameLoop () {
     // right arrow
     moveRight()
   }
+
   yVelocity -= 1.5 // gravity
   x += xVelocity
   y += yVelocity
@@ -68,9 +75,9 @@ function gameLoop () {
   yVelocity *= 0.8 // friction
 
   // if charactor is out of ground
-  if (y < 78) {
+  if (y < groundHeight) {
     isJump = false
-    y = 78
+    y = groundHeight
     yVelocity = 0
   }
 
@@ -93,18 +100,58 @@ function gameLoop () {
   if (LR) { // right
     if (isJump) { // jump
       mario.className = ''
-      mario.classList.add('jumpR')
+      mario.className = 'jumpR'
     } else { // no jump
-      mario.className = ''
-      mario.classList.add('stopR')
+      if (isKeyDown[39] && !isKeyDown[37]) { // rightkey down and leftKey up
+        clearInterval(runLInterval)
+        if (!isRunR) {
+          let runFps = 50
+          runRInterval = setInterval(function () {
+            mario.className = ''
+            if (runMotion) {
+              mario.className = 'runR1'
+              runMotion = 0
+            } else {
+              mario.className = 'runR2'
+              runMotion = 1
+            }
+          }, runFps)
+        }
+        isRunR = true
+      } else {
+        clearInterval(runRInterval)
+        mario.className = ''
+        mario.className = 'stopR'
+        isRunR = false
+      }
     }
   } else { // left
     if (isJump) { // jump
       mario.className = ''
-      mario.classList.add('jumpL')
+      mario.className = 'jumpL'
     } else { // no jump
-      mario.className = ''
-      mario.classList.add('stopL')
+      if (isKeyDown[37] && !isKeyDown[39]) { // leftkey down and rightkey up
+        clearInterval(runRInterval)
+        if (!isRunL) {
+          let runFps = 50
+          runLInterval = setInterval(function () {
+            mario.className = ''
+            if (runMotion) {
+              mario.className = 'runL1'
+              runMotion = 0
+            } else {
+              mario.className = 'runL2'
+              runMotion = 1
+            }
+          }, runFps)
+        }
+        isRunL = true
+      } else {
+        clearInterval(runLInterval)
+        mario.className = ''
+        mario.className = 'stopL'
+        isRunL = false
+      }
     }
   }
   mario.style.left = `${x}px`
@@ -153,8 +200,8 @@ function putBars (bar, idx) {
 function touchLink (link, idx) {
   const linkX = link.offsetLeft
   if (linkX - mario.offsetWidth < x && x < (linkX + link.offsetWidth)) {
-    if (y > screen.offsetHeight - link.offsetHeight) {
-      y = screen.offsetHeight - link.offsetHeight
+    if (y > screen.offsetHeight - link.offsetHeight * 1.8) {
+      y = screen.offsetHeight - link.offsetHeight * 1.8
       yVelocity = 0
       if (!openLink) {
         if (idx === links.length - 1) {

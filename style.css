@@ -16,7 +16,7 @@ nav li {
 }
 
 nav li:last-child {
-  border-right: none;
+  display: none;
 }
 
 nav li a {
@@ -38,15 +38,27 @@ nav .active {
 body {
   height: 100%;
 }
+
+@media screen and (max-width: 600px) {
+  nav li:nth-last-child(2) {
+    display: none;
+  }
+  nav li:nth-last-child(1) {
+    float: right;
+    display: block;
+  }
+}
+
 #screen {
+/*  높이는 항상 전부를 보여주어야 한다. 폭은 창의 크기에 따라 없어져도 된다 */
   position: absolute;
-  background-image: url('background.gif');
+  background-image: url('image/background.gif');
   background-repeat: repeat-x;
-  background-size: contain;
+  background-size: auto 100%; /* 넓이 높이 */
+  height: 100%; /*div의 높이*/
+  width:100%; /*div의 폭*/
   top: 0px;
   left: 0px;
-  height: 100%;
-  width: 100%;
 }
 
 #mario {
@@ -57,24 +69,40 @@ body {
   left: 0px;
 }
 #mario.stopR {
-  background-image: url('m_stopR.gif');
+  background-image: url('image/m_stopR.gif');
   background-repeat: no-repeat;
 }
 #mario.stopL{
-  background-image: url('m_stopL.gif');
+  background-image: url('image/m_stopL.gif');
   background-repeat: no-repeat;
 }
 #mario.jumpR {
-  background-image: url('m_jumpR.gif');
+  background-image: url('image/m_jumpR.gif');
   background-repeat: no-repeat;
 }
 #mario.jumpL {
-  background-image: url('m_jumpL.gif');
+  background-image: url('image/m_jumpL.gif');
+  background-repeat: no-repeat;
+}
+#mario.runR1 {
+  background-image: url('image/m_runR1.gif');
+  background-repeat: no-repeat;
+}
+#mario.runR2 {
+  background-image: url('image/m_runR2.gif');
+  background-repeat: no-repeat;
+}
+#mario.runL1 {
+  background-image: url('image/m_runL1.gif');
+  background-repeat: no-repeat;
+}
+#mario.runL2 {
+  background-image: url('image/m_runL2.gif');
   background-repeat: no-repeat;
 }
 
 .bars {
-  background-image: url('block.gif');
+  background-image: url('image/block.gif');
   position: absolute;
   border: 1px solid black;
   width: 100px;
