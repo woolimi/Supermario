@@ -1,7 +1,8 @@
 const mario = document.querySelector('#mario')
 const screen = document.querySelector('#screen')
 const links = document.querySelectorAll('nav li')
-document.querySelector('#retry').addEventListener('click', createBars)
+document.querySelector('#retry1').addEventListener('click', createBars)
+document.querySelector('#retry2').addEventListener('click', createBars)
 document.querySelector('#left').addEventListener('touchstart', function () {
   isKeyDown[37] = true
 })
