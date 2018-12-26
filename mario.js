@@ -23,7 +23,7 @@ document.querySelector('#jump').addEventListener('touchend', function () {
 })
 const linkAdress = [
   'https://woolimi.github.io',
-  'https://google.com',
+  'https://github.com/woolimi/touch-mario',
   'https://www.w3schools.com/']
 const jumpPower = screen.offsetHeight / 15
 const groundHeight = screen.offsetHeight * 0.135
